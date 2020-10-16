@@ -1,0 +1,3 @@
+include ':MyExtensions'
+include ':app'
+rootProject.name = "My Extensions"
