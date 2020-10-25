@@ -1,9 +1,12 @@
 package com.david.haru.myextensions
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
 import android.content.res.Resources
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
@@ -11,11 +14,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 
 
-fun Context.getApp() = applicationContext as BaseApplication
-fun Fragment.getApp() = context!!.applicationContext as BaseApplication
 fun getApp() = BaseApplication.instance
 fun getAppContext() = BaseApplication.applicationContext
 
@@ -35,24 +35,35 @@ fun showToast(msg: String) {
     Toast.makeText(getAppContext(), msg.orEmpty(), Toast.LENGTH_LONG).show()
 }
 
-fun Context.showToast(@StringRes resource: Int, duration: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(this, resource, duration).show()
-}
-
-fun Context.showToast(text: String?, duration: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(this, text.orEmpty(), duration).show()
-}
-
-
 val Context.notificationManager: NotificationManager
     get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-val Context.connectivityManager: ConnectivityManager
-    get() = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
 val Context.powerManager: PowerManager
     get() = getSystemService(Context.POWER_SERVICE) as PowerManager
 
+val Context.connectivityManager: ConnectivityManager
+    get() = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+
+@SuppressLint("MissingPermission")
+fun Context.isNetworkConnected(): Boolean {
+    try {
+        // Need ACCESS_NETWORK_STATE permission
+        val cManager = connectivityManager
+        val network = cManager.activeNetwork
+        if (network != null) {
+            val networkCapabilities = cManager.getNetworkCapabilities(network)
+            return networkCapabilities!!.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || networkCapabilities.hasTransport(
+                NetworkCapabilities.TRANSPORT_WIFI
+            )
+        }
+        return false
+    } catch (e: Exception) {
+        logD(e.message.toString())
+        return false
+    }
+}
 
 fun doWithDelay(
     delay: Long = 500,
@@ -64,16 +75,26 @@ fun doWithDelay(
     }, delay)
 }
 
-fun Any.logD(message: String) {
+
+fun Any.logD(message: String?) {
     Log.d(this::class.java.simpleName, message.orEmpty())
 }
 
-fun Any.logE(message: String? , e: Throwable = Throwable("empty")) {
+fun Any.logI(message: String?) {
+    Log.i(this::class.java.simpleName, message.orEmpty())
+}
+
+
+fun Any.logE(message: String?, e: Throwable = Throwable("empty")) {
     if (e.message == "empty") {
         Log.e(this::class.java.toString(), "" + message.orEmpty())
     } else {
-        Log.e(this::class.java.toString(), "" + message.orEmpty(), e)
+        logException(e)
     }
+}
+
+fun Any.logException(e: Throwable) {
+    Log.e(this::class.java.toString(), "" + e.message.toString(), e)
 }
 
 //Returns true if no exception was caught. Otherwise, it logs the exception and returns false
