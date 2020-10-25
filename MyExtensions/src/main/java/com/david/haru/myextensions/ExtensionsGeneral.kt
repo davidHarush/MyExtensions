@@ -16,13 +16,10 @@ import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 
 
-fun getApp() = BaseApplication.instance
-fun getAppContext() = BaseApplication.applicationContext
+fun getBaseApp() = BaseApplication.instance
+fun getBaseAppContext() = BaseApplication.applicationContext
 
-@Suppress("DEPRECATION")
-fun getColor(@ColorRes color: Int) = getAppContext().resources.getColor(color)
-
-fun getString(@StringRes string: Int): String = getAppContext().resources.getString(string)
+fun getString(@StringRes string: Int): String = getBaseAppContext().resources.getString(string)
 
 val Int.pxToDp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
@@ -32,7 +29,7 @@ val Int.dpToPx: Int
 
 
 fun showToast(msg: String) {
-    Toast.makeText(getAppContext(), msg.orEmpty(), Toast.LENGTH_LONG).show()
+    Toast.makeText(getBaseAppContext(), msg.orEmpty(), Toast.LENGTH_LONG).show()
 }
 
 val Context.notificationManager: NotificationManager
