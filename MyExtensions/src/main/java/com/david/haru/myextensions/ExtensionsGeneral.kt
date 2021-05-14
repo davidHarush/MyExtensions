@@ -6,20 +6,22 @@ import android.content.Context
 import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
-import android.util.Log
 import android.widget.Toast
-import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 
 
-fun getBaseApp() = BaseApplication.instance
-fun getBaseAppContext() = BaseApplication.applicationContext
+fun getBaseContext() = BaseApplication.baseContext
 
-fun getString(@StringRes string: Int): String = getBaseAppContext().resources.getString(string)
+val Any.classTag: String
+    get() {
+        return this::class.java.simpleName
+    }
+
+
+fun getString(@StringRes string: Int): String = getBaseContext().resources.getString(string)
 
 val Int.pxToDp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
@@ -29,7 +31,7 @@ val Int.dpToPx: Int
 
 
 fun showToast(msg: String) {
-    Toast.makeText(getBaseAppContext(), msg.orEmpty(), Toast.LENGTH_LONG).show()
+    Toast.makeText(getBaseContext(), msg.orEmpty(), Toast.LENGTH_LONG).show()
 }
 
 val Context.notificationManager: NotificationManager
@@ -73,29 +75,8 @@ fun doWithDelay(
 }
 
 
-fun Any.logD(message: String?) {
-    Log.d(this::class.java.simpleName, message.orEmpty())
-}
-
-fun Any.logI(message: String?) {
-    Log.i(this::class.java.simpleName, message.orEmpty())
-}
-
-
-fun Any.logE(message: String?, e: Throwable = Throwable("empty")) {
-    if (e.message == "empty") {
-        Log.e(this::class.java.toString(), "" + message.orEmpty())
-    } else {
-        logException(e)
-    }
-}
-
-fun Any.logException(e: Throwable) {
-    Log.e(this::class.java.toString(), "" + e.message.toString(), e)
-}
-
 //Returns true if no exception was caught. Otherwise, it logs the exception and returns false
-fun tryCatch(body: () -> Unit): Boolean {
+fun Any.tryCatch(body: () -> Unit): Boolean {
     return try {
         body()
         true

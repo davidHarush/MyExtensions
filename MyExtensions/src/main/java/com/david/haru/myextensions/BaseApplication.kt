@@ -7,11 +7,8 @@ open class BaseApplication : Application() {
 
 
     companion object {
-        lateinit var instance: BaseApplication
+        lateinit var baseContext: Context
             private set
-
-        val applicationContext: Context
-            get() = instance.applicationContext
 
     }
 
@@ -19,6 +16,6 @@ open class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
+        baseContext = baseContext
     }
 }

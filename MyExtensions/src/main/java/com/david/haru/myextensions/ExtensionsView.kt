@@ -7,7 +7,6 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.TextView
 import androidx.core.animation.doOnEnd
-import java.lang.Math.max
 
 
 fun TextView.getTrimText(): String = this.text.toString().trim()
