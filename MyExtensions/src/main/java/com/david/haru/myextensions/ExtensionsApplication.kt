@@ -3,7 +3,7 @@ package com.david.haru.myextensions
 import android.app.Application
 import android.content.Context
 
-open class BaseApplication : Application() {
+open class ExtensionsApplication : Application() {
 
 
     companion object {

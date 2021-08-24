@@ -14,7 +14,7 @@ import androidx.annotation.StringRes
 
 
 
-val baseContext = BaseApplication.extensionsContext
+val baseContext = ExtensionsApplication.extensionsContext
 val Any.classTag: String
     get() {
         return this::class.java.simpleName

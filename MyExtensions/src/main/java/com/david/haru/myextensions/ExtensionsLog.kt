@@ -2,11 +2,6 @@ package com.david.haru.myextensions
 
 import android.util.Log
 
-object LogConfig{
-
-}
-
-
 fun Any.logD(message: String?) =
     Log.d(classTag, message.orEmpty())
 
