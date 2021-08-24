@@ -7,14 +7,12 @@ object LogConfig{
 }
 
 
-fun Any.logD(message: String?) {
+fun Any.logD(message: String?) =
     Log.d(classTag, message.orEmpty())
 
-}
 
-fun Any.logI(message: String?) {
+fun Any.logI(message: String?) =
     Log.i(classTag, message.orEmpty())
-}
 
 
 fun Any.logE(message: String?, e: Throwable = Throwable("empty")) {
@@ -25,6 +23,6 @@ fun Any.logE(message: String?, e: Throwable = Throwable("empty")) {
     }
 }
 
-fun Any.logException(e: Throwable) {
+fun Any.logException(e: Throwable) =
     Log.e(classTag, "" + e.message.toString(), e)
-}
+

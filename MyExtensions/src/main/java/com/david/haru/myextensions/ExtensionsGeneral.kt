@@ -13,15 +13,15 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 
 
-fun getBaseContext() = BaseApplication.baseContext
 
+val baseContext = BaseApplication.extensionsContext
 val Any.classTag: String
     get() {
         return this::class.java.simpleName
     }
 
 
-fun getString(@StringRes string: Int): String = getBaseContext().resources.getString(string)
+fun getString(@StringRes string: Int): String = baseContext.resources.getString(string)
 
 val Int.pxToDp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
@@ -31,7 +31,7 @@ val Int.dpToPx: Int
 
 
 fun showToast(msg: String) {
-    Toast.makeText(getBaseContext(), msg.orEmpty(), Toast.LENGTH_LONG).show()
+    Toast.makeText(baseContext, msg.orEmpty(), Toast.LENGTH_LONG).show()
 }
 
 val Context.notificationManager: NotificationManager

@@ -7,7 +7,7 @@ open class BaseApplication : Application() {
 
 
     companion object {
-        lateinit var baseContext: Context
+        lateinit internal var extensionsContext: Context
             private set
 
     }
@@ -16,6 +16,6 @@ open class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        baseContext = baseContext
+        extensionsContext = baseContext
     }
 }
